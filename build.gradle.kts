@@ -53,7 +53,7 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/YOUR_ORG/YOUR_REPO")
+            url = uri("https://maven.pkg.github.com/Xatas-dev/bazar-authorization-sdk")
             credentials {
                 username = System.getenv("GITHUB_ACTOR")
                 password = System.getenv("GITHUB_TOKEN")
