@@ -32,7 +32,7 @@ public class BazarAuthorizationAdminClient implements AutoCloseable {
                     org.bazar.authorization.grpc.CreateUserRequest.newBuilder()
                             .setUserId(request.getUserId())
                             .setSpaceId(request.getSpaceId())
-                            .setCreator(request.isCreator())
+                            .setIsCreator(request.getIsCreator())
                             .build();
 
             org.bazar.authorization.grpc.CreateUserResponse grpcResponse =
@@ -55,6 +55,7 @@ public class BazarAuthorizationAdminClient implements AutoCloseable {
                     org.bazar.authorization.grpc.DeleteUserRequest.newBuilder()
                             .setUserId(request.getUserId())
                             .setSpaceId(request.getSpaceId())
+                            .setIsCreator(request.getIsCreator())
                             .build();
 
             org.bazar.authorization.grpc.DeleteUserResponse grpcResponse =

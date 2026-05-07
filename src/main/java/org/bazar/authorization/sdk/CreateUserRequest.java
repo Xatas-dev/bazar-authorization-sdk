@@ -6,13 +6,13 @@ package org.bazar.authorization.sdk;
 public class CreateUserRequest {
     private final String userId;
     private final long spaceId;
-    private final boolean creator;
+    private final boolean isCreator;
     private final String bearerToken;
 
     private CreateUserRequest(Builder builder) {
         this.userId = builder.userId;
         this.spaceId = builder.spaceId;
-        this.creator = builder.creator;
+        this.isCreator = builder.creator;
         this.bearerToken = builder.bearerToken;
     }
 
@@ -24,8 +24,8 @@ public class CreateUserRequest {
         return spaceId;
     }
 
-    public boolean isCreator() {
-        return creator;
+    public boolean getIsCreator() {
+        return isCreator;
     }
 
     public String getBearerToken() {

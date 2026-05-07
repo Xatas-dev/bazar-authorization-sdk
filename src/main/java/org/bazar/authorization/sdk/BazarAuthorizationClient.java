@@ -4,6 +4,7 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.Metadata;
 import io.grpc.stub.MetadataUtils;
+import org.bazar.authorization.grpc.Attribute;
 import org.bazar.authorization.grpc.AuthorizationServiceGrpc;
 import org.bazar.authorization.grpc.AuthorizeRequest;
 import org.bazar.authorization.grpc.AuthorizeResponse;
@@ -16,11 +17,11 @@ import org.slf4j.LoggerFactory;
  */
 public class BazarAuthorizationClient implements AutoCloseable {
     private static final Logger logger = LoggerFactory.getLogger(BazarAuthorizationClient.class);
-    private static final Metadata.Key<String> AUTHORIZATION_HEADER_KEY =
-            Metadata.Key.of("Authorization", Metadata.ASCII_STRING_MARSHALLER);
+    private static final Metadata.Key<String> AUTHORIZATION_HEADER_KEY = Metadata.Key.of("Authorization", Metadata.ASCII_STRING_MARSHALLER);
 
     private final ManagedChannel channel;
     private final AuthorizationServiceGrpc.AuthorizationServiceBlockingStub baseStub;
+
     private BazarAuthorizationClient(ManagedChannel channel) {
         this.channel = channel;
         this.baseStub = AuthorizationServiceGrpc.newBlockingStub(channel);
@@ -35,15 +36,39 @@ public class BazarAuthorizationClient implements AutoCloseable {
      */
     public boolean authorize(AuthorizationRequest request) {
         try {
-            AuthorizeRequest grpcRequest = AuthorizeRequest.newBuilder()
+
+            var principalAttributes = request.getPrincipalAttributes()
+                    .entrySet()
+                    .stream()
+                    .map(entry -> Attribute
+                            .newBuilder()
+                            .setName(entry.getKey())
+                            .setValue(entry.getValue())
+                            .build()
+                    ).toList();
+
+            var resourceAttributes = request.getResourceAttributes()
+                    .entrySet()
+                    .stream()
+                    .map(entry -> Attribute
+                            .newBuilder()
+                            .setName(entry.getKey())
+                            .setValue(entry.getValue())
+                            .build()
+                    ).toList();
+
+            AuthorizeRequest grpcRequest = AuthorizeRequest
+                    .newBuilder()
                     .setSpaceId(request.getSpaceId())
                     .setResource(request.getPermission().getResource())
                     .setAction(request.getPermission().getAction())
+                    .setResourceId(request.getResourceId())
+                    .addAllPrincipalAttributes(principalAttributes)
+                    .addAllResourceAttributes(resourceAttributes)
                     .build();
 
             AuthorizeResponse grpcResponse = stubForCall(request).authorize(grpcRequest);
-            logger.debug("Authorization check completed for spaceId={}, permission={}",
-                    request.getSpaceId(), request.getPermission());
+            logger.debug("Authorization check completed for spaceId={}, permission={}", request.getSpaceId(), request.getPermission());
 
             return grpcResponse.getAllowed();
         } catch (io.grpc.StatusRuntimeException e) {
@@ -131,8 +156,7 @@ public class BazarAuthorizationClient implements AutoCloseable {
          * Build the AuthorizationClient
          */
         public BazarAuthorizationClient build() {
-            ManagedChannelBuilder<?> channelBuilder = ManagedChannelBuilder
-                    .forAddress(host, port);
+            ManagedChannelBuilder<?> channelBuilder = ManagedChannelBuilder.forAddress(host, port);
 
             if (usePlaintext) {
                 channelBuilder.usePlaintext();

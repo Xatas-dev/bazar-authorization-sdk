@@ -6,12 +6,14 @@ package org.bazar.authorization.sdk;
 public class DeleteUserRequest {
     private final String userId;
     private final long spaceId;
+    private final boolean isCreator;
     private final String bearerToken;
 
     private DeleteUserRequest(Builder builder) {
         this.userId = builder.userId;
         this.spaceId = builder.spaceId;
         this.bearerToken = builder.bearerToken;
+        this.isCreator = builder.isCreator;
     }
 
     public String getUserId() {
@@ -20,6 +22,10 @@ public class DeleteUserRequest {
 
     public long getSpaceId() {
         return spaceId;
+    }
+
+    public boolean getIsCreator() {
+        return isCreator;
     }
 
     public String getBearerToken() {
@@ -33,6 +39,7 @@ public class DeleteUserRequest {
     public static class Builder {
         private String userId;
         private long spaceId;
+        private boolean isCreator;
         private String bearerToken;
 
         public Builder userId(String userId) {
@@ -42,6 +49,11 @@ public class DeleteUserRequest {
 
         public Builder spaceId(long spaceId) {
             this.spaceId = spaceId;
+            return this;
+        }
+
+        public Builder isCreator(boolean isCreator) {
+            this.isCreator = isCreator;
             return this;
         }
 
