@@ -21,7 +21,12 @@ public enum Permission {
 
     // SPACE_USER_ACTIONS permissions
     SPACE_USER_ACTIONS_READ("space_user_actions", "READ"),
-    SPACE_USER_ACTIONS_WRITE("space_user_actions", "WRITE");
+    SPACE_USER_ACTIONS_WRITE("space_user_actions", "WRITE"),
+
+    // NODES permissions
+    NODES_UPLOAD("nodes", "UPLOAD"),
+    NODES_DOWNLOAD("nodes", "DOWNLOAD"),
+    NODES_DELETE("nodes", "DELETE");
 
     private final String resource;
     private final String action;
