@@ -14,6 +14,7 @@ public enum Permission {
     CHAT_MESSAGES_READ("chat_messages", "READ"),
     CHAT_MESSAGES_WRITE("chat_messages", "WRITE"),
     CHAT_MESSAGES_DELETE("chat_messages", "DELETE"),
+    CHAT_MESSAGES_UPDATE("chat_messages", "UPDATE"),
 
     // SPACE_USER permissions
     SPACE_USER_DELETE("space_user", "DELETE"),
