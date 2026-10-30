@@ -28,7 +28,8 @@ public enum Permission {
     STORAGE_NODE_READ("storage_node", "READ"),
     STORAGE_NODE_UPLOAD("storage_node", "UPLOAD"),
     STORAGE_NODE_DOWNLOAD("storage_node", "DOWNLOAD"),
-    STORAGE_NODE_DELETE("storage_node", "DELETE");
+    STORAGE_NODE_DELETE("storage_node", "DELETE"),
+    STORAGE_NODE_UPDATE("storage_node", "UPDATE");
 
     private final String resource;
     private final String action;
